@@ -8,7 +8,7 @@ const Navbar = (props) => {
       <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon" />
       </button>
-      <Link className="navbar-brand" to="/"><span className="fa fa-microphone" aria-hidden="true"></span>&nbsp;&nbsp;Speek</Link>
+      <Link className="navbar-brand" to="/"><span className="fa fa-microphone" aria-hidden="true"></span>&nbsp;&nbsp;Speeek</Link>
       
       <div className="collapse navbar-collapse" id="navbarToggleExternalContent">
         <ul className="navbar-nav mr-auto">
