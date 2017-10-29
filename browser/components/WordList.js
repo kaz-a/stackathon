@@ -1,59 +1,38 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import negativeWords from './negativeWordList.json';
-import positiveWords from './positiveWordList.json';
+import { connect } from 'react-redux';
+import { addNewWord } from '../store';
 
-
-export default class WordList extends Component {
-  constructor(){
-    super();
+class WordList extends Component {
+  constructor(props){
+    super(props);
     this.state = {
-      newNegativeWord: "",
-      newPositiveWord: "",
-      negativeWords: negativeWords,
-      positiveWords: positiveWords
+      word: "",
+      category: "",
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(event){
-    console.log(event.target.name, event.target.value); 
+    const key = event.target.name, val = event.target.value;
+    key === "word" ? this.setState({ word: val }) : 
+    this.setState({ category: val })
+  }
 
-    // const positiveWordsCopy = positiveWords.slice();
-    // const negativeWordsCopy = negativeWords.slice();
-
-    // if(event.target.name.category === "positive") {      
-    //   positiveWordsCopy.push(event.target.value.word);
-    //   this.setState({ positiveWords: positiveWordsCopy });
-    // } else {
-    //   negativeWordsCopy.push(event.target.value.word);
-    //   this.setState({ negativeWords: negativeWordsCopy });
-    // }
-
-    event.target.name.category === "positive" ? 
-      this.setState({ newPositiveWord: event.target.value.word }) :
-      this.setState({ newNegativeWord: event.target.value.word });  
+  handleSubmit(event){
+    event.preventDefault();
+    this.props.handleAdd(this.state);
   }
 
   handleClick(){
-    console.log("firing handleClick", this.state.newPositiveWord); 
-    // const jsonfile = require('jsonfile')
-    // override external json files with this.state.positiveWords/negativeWords
-    // const override = require('json-override');
-    // override(positiveWords, this.state.newPositiveWord);
-    // override(negativeWords, this.state.newNegativeWord);
-
-    jsonfile.writeFile(positiveWords, this.state.positiveWords, function (err) {
-      console.error(err)
-    })
-
-    // jsonfile.writeFileSync(positiveWords, this.state.positiveWords, {flag: 'a'})
-
     this.refs.word.value = "";
+    this.refs.category.value = "";
   }
 
   render(){
+    const { words, handleAdd } = this.props;
     const wordOptions = [{ val: "positive" }, { val: "negative" }];
     const positiveWordStyle = { color: "#5cb85c" }, negativeWordStyle = { color: "#d9534f" };
     const btnStyle = { 
@@ -67,12 +46,21 @@ export default class WordList extends Component {
     }
     const fontStyle = { fontFamily: "'Cabin Sketch', cursive" };
 
+    const positiveWords = words.filter(word => {
+      return word.category === "positive";
+    });
+
+    const negativeWords = words.filter(word => {
+      return word.category === "negative";
+    });
+
+
     return (
       <div className="container pb-5">
         <div className="row">
           <div className="col-md-4">
             <h1>Word List</h1>
-            <form>
+            <form onSubmit={ this.handleSubmit }>
               <div className="form-group">
                 <input name="word" type="text" ref="word" onChange={ this.handleChange } 
                   className="form-control" placeholder="Please enter new word" style={ fontStyle } />
@@ -87,7 +75,7 @@ export default class WordList extends Component {
                   })
                 }
               </select>
-              <Link to="/word_list" className="btn btn-info mt-3" onClick={ this.handleClick } style={ btnStyle }>Add new word</Link>
+              <button className="btn btn-info mt-3" onClick={ this.handleClick } style={ btnStyle }>Add new word</button>
             </form>
           </div>
 
@@ -98,7 +86,7 @@ export default class WordList extends Component {
                 {
                   positiveWords && positiveWords.map(word => {
                     return (
-                      <span key={ word }>{ word } </span>
+                      <span key={ word.id }>{ word.word } </span>
                     )
                   })
                 }
@@ -109,7 +97,7 @@ export default class WordList extends Component {
                 {
                   negativeWords && negativeWords.map(word => {
                     return (
-                      <span key={ word }>{ word } </span>
+                      <span key={ word.id }>{ word.word } </span>
                     )
                   })
                 }
@@ -123,3 +111,24 @@ export default class WordList extends Component {
   }
 
 }
+
+
+const mapStateToProps = ({ words }) => {
+  return {
+    words
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleAdd: (word) => {
+      dispatch(addNewWord(word))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WordList);
+
+
+
+

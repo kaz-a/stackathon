@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import store, { fetchWords } from '../store';
 
 import Navbar from './Navbar';
 import Home from './Home';
 import WordList from './WordList';
 
-export default class Main extends Component {
+class Main extends Component {
+  constructor(){
+    super()
+  }
+
+  componentDidMount(){
+    this.props.getData()
+  }
+
   render(){
     return (
       <div className='container'>
@@ -14,7 +24,7 @@ export default class Main extends Component {
           <Navbar />
           <Switch>
             <Route exact path='/' component={ Home } />
-            <Route exact path='/word_list' component={ WordList } />
+            <Route exact path='/words' component={ WordList } />
           </Switch>
         </main>
 
@@ -26,8 +36,23 @@ export default class Main extends Component {
         </nav>
       </div>
     )
-
   }
-
 }
+
+
+const mapStateToProps = ({ words }) => {
+  return {
+    words
+  }
+};
+ 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getData: () => {
+      dispatch(fetchWords());
+    }
+  };
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 

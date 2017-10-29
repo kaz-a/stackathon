@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import SpeechRecognition from 'react-speech-recognition';
-import negativeWords from './negativeWordList.json';
-import positiveWords from './positiveWordList.json';
+import { connect } from 'react-redux';
 
 const propTypes = {
   // Props injected by SpeechRecognition
@@ -12,7 +11,7 @@ const propTypes = {
 
 class Dictaphone extends Component {
   render() {
-    const { transcript, resetTranscript, browserSupportsSpeechRecognition } = this.props
+    const { transcript, resetTranscript, browserSupportsSpeechRecognition, words } = this.props;
     const wordsSpoken = transcript.split(' ');
     const iconStyle = { fontSize: "36px", marginTop: "28%" }
     const btnStyle = { 
@@ -24,7 +23,18 @@ class Dictaphone extends Component {
       cursor: "pointer",
       width: "20%"
     }
+    const positiveWords = words.filter(word => {
+      return word.category === "positive";
+    }).map(word => {
+      return word.word
+    });
 
+    const negativeWords = words.filter(word => {
+      return word.category === "negative";
+    }).map(word => {
+      return word.word
+    });
+    
     if (!browserSupportsSpeechRecognition) {
       return null
     }
@@ -57,23 +67,12 @@ class Dictaphone extends Component {
 
           <div className="col-md-6 mt-3">
           {
-            wordsSpoken && wordsSpoken.map(word => {
-              for(let i=0; i<negativeWords.length; i++){
-                if(word === negativeWords[i]){
-                  return (                                      
-                    <span className="badge badge-pill badge-danger m-1 p-3">{ word }</span>
-                  )
-                } 
-
-                for(let j=0; j<positiveWords.length; j++){
-                  if(word === positiveWords[j]){
-                    return (
-                      <span className="badge badge-pill badge-success m-1 p-3">{ word }</span>
-                    )
-                  }
-                }
-              }
-            })
+            wordsSpoken && wordsSpoken.map(word => {                 
+              return (
+                (negativeWords.indexOf(word) >= 0) ? <span className="badge badge-pill badge-danger m-1 p-3">{ word }</span> : 
+                (positiveWords.indexOf(word) >= 0) ? <span className="badge badge-pill badge-success m-1 p-3">{ word }</span> : ""
+              )
+            })            
           }
           </div>
         </div>
@@ -84,8 +83,14 @@ class Dictaphone extends Component {
 }
 
 Dictaphone.propTypes = propTypes
+// export default SpeechRecognition(Dictaphone);
 
-export default SpeechRecognition(Dictaphone);
+const mapStateToProps = (state) => {
+  return {
+    words: state.words
+  }
+}
 
+export default connect(mapStateToProps, null)(SpeechRecognition(Dictaphone));
 
 

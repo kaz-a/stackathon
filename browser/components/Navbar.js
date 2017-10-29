@@ -13,7 +13,7 @@ const Navbar = (props) => {
       <div className="collapse navbar-collapse" id="navbarToggleExternalContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to="/word_list" className="nav-link">Word List</Link>
+            <Link to="/words" className="nav-link">Word List</Link>
           </li>
         </ul>
       </div>
