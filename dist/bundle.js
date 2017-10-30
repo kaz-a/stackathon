@@ -32628,7 +32628,8 @@ var WordList = function (_Component) {
 
     _this.state = {
       word: "",
-      category: ""
+      category: "",
+      searchWord: ""
     };
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -32641,7 +32642,7 @@ var WordList = function (_Component) {
     value: function handleChange(event) {
       var key = event.target.name,
           val = event.target.value;
-      key === "word" ? this.setState({ word: val }) : this.setState({ category: val });
+      key === "word" ? this.setState({ word: val }) : key === "category" ? this.setState({ category: val }) : this.setState({ searchWord: val });
     }
   }, {
     key: 'handleSubmit',
@@ -32653,11 +32654,14 @@ var WordList = function (_Component) {
     key: 'handleClick',
     value: function handleClick() {
       this.refs.word.value = "";
-      this.refs.category.value = "";
+      // this.refs.category.value = "";
+      this.refs.search.value = "";
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props = this.props,
           words = _props.words,
           handleAdd = _props.handleAdd;
@@ -32684,32 +32688,56 @@ var WordList = function (_Component) {
         return word.category === "negative";
       });
 
+      var searchInPositiveWords = positiveWords.filter(function (word) {
+        return word.word === _this2.state.searchWord;
+      }).map(function (word) {
+        return word.word;
+      });
+
+      var searchInNegativeWords = negativeWords.filter(function (word) {
+        return word.word === _this2.state.searchWord;
+      }).map(function (word) {
+        return word.word;
+      });
+
       return _react2.default.createElement(
         'div',
         { className: 'container pb-5' },
         _react2.default.createElement(
           'div',
-          { className: 'row' },
+          { className: 'row mt-5' },
           _react2.default.createElement(
             'div',
-            { className: 'col-md-4' },
+            { className: 'col-md-3' },
             _react2.default.createElement(
               'h1',
               null,
               'Word List'
             ),
             _react2.default.createElement(
+              'div',
+              { className: 'form-group', style: btnStyle },
+              _react2.default.createElement('input', { name: 'search', type: 'text', value: this.state.searchWord, ref: 'search', onChange: this.handleChange,
+                className: 'form-control', placeholder: 'Search word', style: fontStyle })
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
               'form',
-              { onSubmit: this.handleSubmit },
+              { onSubmit: this.handleSubmit, className: 'card p-3', style: btnStyle },
+              _react2.default.createElement(
+                'h3',
+                null,
+                'Add a new word'
+              ),
               _react2.default.createElement(
                 'div',
                 { className: 'form-group' },
                 _react2.default.createElement('input', { name: 'word', type: 'text', ref: 'word', onChange: this.handleChange,
-                  className: 'form-control', placeholder: 'Please enter new word', style: fontStyle })
+                  className: 'form-control', placeholder: 'Please enter new word', style: btnStyle })
               ),
               _react2.default.createElement(
                 'select',
-                { name: 'category', className: 'form-control', style: fontStyle, onChange: this.handleChange },
+                { name: 'category', className: 'form-control', style: btnStyle, onChange: this.handleChange },
                 _react2.default.createElement(
                   'option',
                   null,
@@ -32730,9 +32758,10 @@ var WordList = function (_Component) {
               )
             )
           ),
+          _react2.default.createElement('div', { className: 'col-md-3' }),
           _react2.default.createElement(
             'div',
-            { className: 'col-md-8' },
+            { className: 'col-md-6' },
             _react2.default.createElement(
               'div',
               { className: 'row' },
@@ -32744,7 +32773,11 @@ var WordList = function (_Component) {
                   { style: positiveWordStyle },
                   'Positive Words'
                 ),
-                positiveWords && positiveWords.map(function (word) {
+                searchInPositiveWords.length ? _react2.default.createElement(
+                  'span',
+                  { className: 'badge badge-pill badge-success' },
+                  this.state.searchWord
+                ) : positiveWords && positiveWords.map(function (word) {
                   return _react2.default.createElement(
                     'span',
                     { key: word.id },
@@ -32761,7 +32794,11 @@ var WordList = function (_Component) {
                   { style: negativeWordStyle },
                   'Negative Words'
                 ),
-                negativeWords && negativeWords.map(function (word) {
+                searchInNegativeWords.length ? _react2.default.createElement(
+                  'span',
+                  { className: 'badge badge-pill badge-danger' },
+                  this.state.searchWord
+                ) : negativeWords && negativeWords.map(function (word) {
                   return _react2.default.createElement(
                     'span',
                     { key: word.id },

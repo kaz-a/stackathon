@@ -9,6 +9,7 @@ class WordList extends Component {
     this.state = {
       word: "",
       category: "",
+      searchWord: ""
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +19,8 @@ class WordList extends Component {
   handleChange(event){
     const key = event.target.name, val = event.target.value;
     key === "word" ? this.setState({ word: val }) : 
-    this.setState({ category: val })
+    key === "category" ? this.setState({ category: val }) :
+    this.setState({ searchWord: val });
   }
 
   handleSubmit(event){
@@ -28,7 +30,8 @@ class WordList extends Component {
 
   handleClick(){
     this.refs.word.value = "";
-    this.refs.category.value = "";
+    // this.refs.category.value = "";
+    this.refs.search.value = "";
   }
 
   render(){
@@ -54,18 +57,38 @@ class WordList extends Component {
       return word.category === "negative";
     });
 
+    const searchInPositiveWords = positiveWords.filter(word => {
+      return word.word === this.state.searchWord
+    }).map(word => {
+      return word.word
+    });
+
+    const searchInNegativeWords = negativeWords.filter(word => {
+      return word.word === this.state.searchWord
+    }).map(word => {
+      return word.word
+    });
 
     return (
       <div className="container pb-5">
-        <div className="row">
-          <div className="col-md-4">
+        <div className="row mt-5">
+          <div className="col-md-3">
             <h1>Word List</h1>
-            <form onSubmit={ this.handleSubmit }>
+
+            <div className="form-group" style={ btnStyle }>
+              <input name="search" type="text" value={ this.state.searchWord } ref="search" onChange={ this.handleChange } 
+                className="form-control" placeholder="Search word" style={ fontStyle } />
+            </div>
+
+            <br/>
+
+            <form onSubmit={ this.handleSubmit } className="card p-3" style={ btnStyle }>
+              <h3>Add a new word</h3>
               <div className="form-group">
                 <input name="word" type="text" ref="word" onChange={ this.handleChange } 
-                  className="form-control" placeholder="Please enter new word" style={ fontStyle } />
+                  className="form-control" placeholder="Please enter new word" style={ btnStyle } />
               </div>
-              <select name="category" className="form-control" style={ fontStyle } onChange={ this.handleChange }>
+              <select name="category" className="form-control" style={ btnStyle } onChange={ this.handleChange }>
                 <option>Select word category</option>
                 {
                   wordOptions.map(wordOption => {
@@ -79,22 +102,27 @@ class WordList extends Component {
             </form>
           </div>
 
-          <div className="col-md-8">
+          <div className="col-md-3"></div>
+
+          <div className="col-md-6">
             <div className="row">
               <div className="col-md-6">
                 <h3 style={ positiveWordStyle }>Positive Words</h3>
                 {
+                  searchInPositiveWords.length ? <span className="badge badge-pill badge-success">{ this.state.searchWord }</span> : 
                   positiveWords && positiveWords.map(word => {
                     return (
                       <span key={ word.id }>{ word.word } </span>
                     )
-                  })
+                  }) 
+                  
                 }
               </div>
 
               <div className="col-md-6">            
                 <h3 style={ negativeWordStyle }>Negative Words</h3>
                 {
+                  searchInNegativeWords.length ? <span className="badge badge-pill badge-danger">{ this.state.searchWord }</span> : 
                   negativeWords && negativeWords.map(word => {
                     return (
                       <span key={ word.id }>{ word.word } </span>
