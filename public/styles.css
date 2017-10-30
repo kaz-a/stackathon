@@ -49,3 +49,8 @@
   75% {transform:scale(1.75); opacity:1;}
   100% {transform:scale(2); opacity:0;}
 }
+
+.btn:hover {
+  background: transparent;
+  color: #000;
+}

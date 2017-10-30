@@ -38,11 +38,20 @@ class WordList extends Component {
     const { words, handleAdd } = this.props;
     const wordOptions = [{ val: "positive" }, { val: "negative" }];
     const positiveWordStyle = { color: "#5cb85c" }, negativeWordStyle = { color: "#d9534f" };
-    const btnStyle = { 
+    const divStyle = { 
       backgroundColor: "transparent", 
       border: "1px black solid", 
       fontFamily: "'Cabin Sketch', cursive", 
       color: "#000",
+      borderRadius: 0,
+      cursor: "pointer",
+      width: "100%"
+    }
+    const btnStyle = { 
+      backgroundColor: "black", 
+      border: "1px black solid", 
+      fontFamily: "'Cabin Sketch', cursive", 
+      color: "#fff",
       borderRadius: 0,
       cursor: "pointer",
       width: "100%"
@@ -75,20 +84,20 @@ class WordList extends Component {
           <div className="col-md-3">
             <h1>Word List</h1>
 
-            <div className="form-group" style={ btnStyle }>
+            <div className="form-group" style={ divStyle }>
               <input name="search" type="text" value={ this.state.searchWord } ref="search" onChange={ this.handleChange } 
                 className="form-control" placeholder="Search word" style={ fontStyle } />
             </div>
 
             <br/>
 
-            <form onSubmit={ this.handleSubmit } className="card p-3" style={ btnStyle }>
+            <form onSubmit={ this.handleSubmit } className="card p-3" style={ divStyle }>
               <h3>Add a new word</h3>
               <div className="form-group">
                 <input name="word" type="text" ref="word" onChange={ this.handleChange } 
-                  className="form-control" placeholder="Please enter new word" style={ btnStyle } />
+                  className="form-control" placeholder="Please enter new word" style={ divStyle } />
               </div>
-              <select name="category" className="form-control" style={ btnStyle } onChange={ this.handleChange }>
+              <select name="category" className="form-control" style={ divStyle } onChange={ this.handleChange }>
                 <option>Select word category</option>
                 {
                   wordOptions.map(wordOption => {

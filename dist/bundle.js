@@ -32669,11 +32669,20 @@ var WordList = function (_Component) {
       var wordOptions = [{ val: "positive" }, { val: "negative" }];
       var positiveWordStyle = { color: "#5cb85c" },
           negativeWordStyle = { color: "#d9534f" };
-      var btnStyle = {
+      var divStyle = {
         backgroundColor: "transparent",
         border: "1px black solid",
         fontFamily: "'Cabin Sketch', cursive",
         color: "#000",
+        borderRadius: 0,
+        cursor: "pointer",
+        width: "100%"
+      };
+      var btnStyle = {
+        backgroundColor: "black",
+        border: "1px black solid",
+        fontFamily: "'Cabin Sketch', cursive",
+        color: "#fff",
         borderRadius: 0,
         cursor: "pointer",
         width: "100%"
@@ -32716,14 +32725,14 @@ var WordList = function (_Component) {
             ),
             _react2.default.createElement(
               'div',
-              { className: 'form-group', style: btnStyle },
+              { className: 'form-group', style: divStyle },
               _react2.default.createElement('input', { name: 'search', type: 'text', value: this.state.searchWord, ref: 'search', onChange: this.handleChange,
                 className: 'form-control', placeholder: 'Search word', style: fontStyle })
             ),
             _react2.default.createElement('br', null),
             _react2.default.createElement(
               'form',
-              { onSubmit: this.handleSubmit, className: 'card p-3', style: btnStyle },
+              { onSubmit: this.handleSubmit, className: 'card p-3', style: divStyle },
               _react2.default.createElement(
                 'h3',
                 null,
@@ -32733,11 +32742,11 @@ var WordList = function (_Component) {
                 'div',
                 { className: 'form-group' },
                 _react2.default.createElement('input', { name: 'word', type: 'text', ref: 'word', onChange: this.handleChange,
-                  className: 'form-control', placeholder: 'Please enter new word', style: btnStyle })
+                  className: 'form-control', placeholder: 'Please enter new word', style: divStyle })
               ),
               _react2.default.createElement(
                 'select',
-                { name: 'category', className: 'form-control', style: btnStyle, onChange: this.handleChange },
+                { name: 'category', className: 'form-control', style: divStyle, onChange: this.handleChange },
                 _react2.default.createElement(
                   'option',
                   null,
