@@ -51,6 +51,7 @@ class Analyze extends Component {
     let yAxis = d3.axisLeft().scale(y).ticks(6);
 
     let color = d3.scaleOrdinal(d3.schemeCategory10);
+    let barWidth = width / nestedData.length;
 
     let tooltip = d3.select(".chart").append("div")   
       .attr("class", "tooltip").style("opacity", 0);
@@ -94,7 +95,7 @@ class Analyze extends Component {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.key); })
       .attr("y", function(d) { return y(d.value.totalCount); })
-      .attr("width", 10)
+      .attr("width", barWidth - 1)
       .attr("height", function(d) { return height - y(d.value.totalCount); })
       .style("fill", function(d) { return negativeWords.indexOf(d.key) >= 0 ? "#d9534f" : positiveWords.indexOf(d.key) >= 0 ? "#5cb85c" : "#ccc" })
       .style("stroke", "#fff")
