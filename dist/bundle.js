@@ -42232,7 +42232,19 @@ var Analyze = function (_Component) {
         };
       }).entries(data);
 
-      console.log(nestedData);
+      // console.log(nestedData);
+
+      var positiveWords = words.filter(function (word) {
+        return word.category === "positive";
+      }).map(function (word) {
+        return word.word;
+      });
+
+      var negativeWords = words.filter(function (word) {
+        return word.category === "negative";
+      }).map(function (word) {
+        return word.word;
+      });
 
       var margin = { top: 50, right: 10, bottom: 100, left: 60 };
       var width = 600 - margin.left - margin.right,
@@ -42268,14 +42280,14 @@ var Analyze = function (_Component) {
         return y(d.value.totalCount);
       }).attr("width", 10).attr("height", function (d) {
         return height - y(d.value.totalCount);
-      }).style("fill", "#ccc").on("mouseover", function (d) {
-        d3.select(this).style("fill", function (d) {
-          return color(d.key);
-        });
+      }).style("fill", function (d) {
+        return negativeWords.indexOf(d.key) >= 0 ? "#d9534f" : positiveWords.indexOf(d.key) >= 0 ? "#5cb85c" : "#ccc";
+      }).style("stroke", "#fff").on("mouseover", function (d) {
+        d3.select(this).style("opacity", 0.8);
         tooltip.text("'" + d.key + "' was said " + d.value.totalCount + " times").style("opacity", 0.8).style("left", d3.event.pageX - 700 + "px").style("top", d3.event.pageY - 100 + "px");
       }).on("mouseout", function (d) {
         tooltip.style("opacity", 0);
-        d3.select(this).style("fill", "#ccc");
+        d3.select(this).style("opacity", 1);
       });
 
       return _react2.default.createElement(

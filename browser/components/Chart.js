@@ -28,7 +28,19 @@ class Analyze extends Component {
       }})
       .entries(data);
 
-    console.log(nestedData);
+    // console.log(nestedData);
+
+    const positiveWords = words.filter(word => {
+      return word.category === "positive";
+    }).map(word => {
+      return word.word
+    });
+
+    const negativeWords = words.filter(word => {
+      return word.category === "negative";
+    }).map(word => {
+      return word.word
+    });
 
     const margin = {top: 50, right: 10, bottom: 100, left: 60};
     const width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
@@ -84,9 +96,10 @@ class Analyze extends Component {
       .attr("y", function(d) { return y(d.value.totalCount); })
       .attr("width", 10)
       .attr("height", function(d) { return height - y(d.value.totalCount); })
-      .style("fill", "#ccc")
+      .style("fill", function(d) { return negativeWords.indexOf(d.key) >= 0 ? "#d9534f" : positiveWords.indexOf(d.key) >= 0 ? "#5cb85c" : "#ccc" })
+      .style("stroke", "#fff")
       .on("mouseover", function(d) {
-        d3.select(this).style("fill", function(d) { return color(d.key); })
+        d3.select(this).style("opacity", 0.8)
         tooltip.text("'" + d.key + "' was said " + d.value.totalCount + " times")
           .style("opacity", 0.8)
           .style("left", (d3.event.pageX - 700) + "px") 
@@ -94,7 +107,7 @@ class Analyze extends Component {
       })
       .on("mouseout", function(d) {
           tooltip.style("opacity", 0);
-          d3.select(this).style("fill", "#ccc");
+          d3.select(this).style("opacity", 1);
       });
         
 
