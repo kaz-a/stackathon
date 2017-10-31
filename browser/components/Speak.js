@@ -1,17 +1,31 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes, Component } from 'react';
+import { Link } from 'react-router-dom';
 import SpeechRecognition from 'react-speech-recognition';
 import { connect } from 'react-redux';
+import { postTranscript } from '../store';
 
 const propTypes = {
   // Props injected by SpeechRecognition
   transcript: PropTypes.string,
   resetTranscript: PropTypes.func,
-  browserSupportsSpeechRecognition: PropTypes.bool
+  browserSupportsSpeechRecognition: PropTypes.bool,
+  stopListening: PropTypes.func,
+  finalTranscript: PropTypes.string
 }
 
 class Dictaphone extends Component {
+  constructor(props){
+    super(props)
+    this.stopRecordingAndSaveText = this.stopRecordingAndSaveText.bind(this);
+  }
+
+  stopRecordingAndSaveText(){
+    this.props.stopListening;
+    this.props.handleAdd({ text: this.props.transcript });
+  }
+
   render() {
-    const { transcript, resetTranscript, browserSupportsSpeechRecognition, words } = this.props;
+    const { transcript, resetTranscript, browserSupportsSpeechRecognition, stopListening, finalTranscript, words } = this.props;
     const wordsSpoken = transcript.split(' ');
     const iconStyle = { fontSize: "36px", marginTop: "28%" }
     const btnStyle = { 
@@ -21,8 +35,9 @@ class Dictaphone extends Component {
       color: "#000",
       borderRadius: 0,
       cursor: "pointer",
-      width: "20%"
+      width: "auto"
     }
+
     const positiveWords = words.filter(word => {
       return word.category === "positive";
     }).map(word => {
@@ -53,8 +68,8 @@ class Dictaphone extends Component {
             <h1>Say something...</h1>
             <p>Speak to me and I will show you what <span className="badge badge-pill badge-success">positive</span> or  
             <span className="badge badge-pill badge-danger">negative</span> words you are saying.</p>  
-            <button className="btn btn-info mt-3" style={ btnStyle } onClick={ resetTranscript }>Reset</button>
-                           
+            <button className="btn btn-info m-3" style={ btnStyle } onClick={ resetTranscript }>Reset</button>
+            <Link className="btn btn-info m-3" style={ btnStyle } onClick={ this.stopRecordingAndSaveText } to="/analyze">Analyze</Link>               
           </div>
         </div>
 
@@ -85,12 +100,18 @@ class Dictaphone extends Component {
 Dictaphone.propTypes = propTypes
 // export default SpeechRecognition(Dictaphone);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ words }) => {
   return {
-    words: state.words
+    words
   }
 }
 
-export default connect(mapStateToProps, null)(SpeechRecognition(Dictaphone));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleAdd: (transcript) => {
+      dispatch(postTranscript(transcript))
+    }
+  }
+}
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(SpeechRecognition(Dictaphone));

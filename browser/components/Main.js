@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import store, { fetchWords } from '../store';
+import store, { fetchWords, fetchTranscripts } from '../store';
 
 import Navbar from './Navbar';
 import Home from './Home';
 import WordList from './WordList';
+import Chart from './Chart';
 
 class Main extends Component {
   constructor(){
@@ -14,7 +15,8 @@ class Main extends Component {
   }
 
   componentDidMount(){
-    this.props.getData()
+    this.props.getWords();
+    this.props.getTranscripts();
   }
 
   render(){
@@ -25,13 +27,14 @@ class Main extends Component {
           <Switch>
             <Route exact path='/' component={ Home } />
             <Route exact path='/words' component={ WordList } />
+            <Route exact path='/analyze' component={ Chart } />
           </Switch>
         </main>
 
-        <nav className="navbar navbar-toggleable-md navbar-inverse fixed-bottom bg-inverse">
+        <nav className="navbar navbar-toggleable-md navbar-inverse bg-info fixed-bottom">
           <footer className="text-white">
           <span className="fa fa-copyright" aria-hidden="true"></span>2017
-            made with <span className="fa fa-heart" aria-hidden="true"></span> by <a href="www.github.com/kaz-a">kaz-a</a> 
+            Made with <span className="fa fa-heart" aria-hidden="true"></span> by <a href="https://github.com/kaz-a/stackathon">kaz-a</a> 
           </footer>
         </nav>
       </div>
@@ -40,16 +43,20 @@ class Main extends Component {
 }
 
 
-const mapStateToProps = ({ words }) => {
+const mapStateToProps = ({ words, texts }) => {
   return {
-    words
+    words, 
+    texts
   }
 };
  
 const mapDispatchToProps = (dispatch) => {
   return {
-    getData: () => {
+    getWords: () => {
       dispatch(fetchWords());
+    },
+    getTranscripts: () => {
+      dispatch(fetchTranscripts());
     }
   };
 }

@@ -29,6 +29,20 @@ app.post("/api", (req, res, next) => {
   .catch(next);
 })
 
+app.get("/api/transcripts", (req, res, next) => {
+  db.Text.findAll()
+    .then(data => {
+      res.send(data)
+    })
+    .catch(next);
+})
+
+app.post("/api/transcripts", (req, res, next) => {
+  db.Text.create(req.body)
+    .then(() => res.sendStatus(204))
+    .catch(next);
+})
+
 
 app.listen(port, () => {
   console.log(chalk.blue(`server listening on port ${port}...`));

@@ -84,7 +84,7 @@ class WordList extends Component {
           <div className="col-md-3">
             <h1>Word List</h1>
 
-            <div className="form-group" style={ divStyle }>
+            <div className="form-group mt-5" style={ divStyle }>
               <input name="search" type="text" value={ this.state.searchWord } ref="search" onChange={ this.handleChange } 
                 className="form-control" placeholder="Search word" style={ fontStyle } />
             </div>
@@ -118,7 +118,7 @@ class WordList extends Component {
               <div className="col-md-6">
                 <h3 style={ positiveWordStyle }>Positive Words</h3>
                 {
-                  searchInPositiveWords.length ? <span className="badge badge-pill badge-success">{ this.state.searchWord }</span> : 
+                  searchInPositiveWords.length ? <span className="badge badge-pill badge-success p-3">{ this.state.searchWord }</span> : 
                   positiveWords && positiveWords.map(word => {
                     return (
                       <span key={ word.id }>{ word.word } </span>
@@ -131,7 +131,7 @@ class WordList extends Component {
               <div className="col-md-6">            
                 <h3 style={ negativeWordStyle }>Negative Words</h3>
                 {
-                  searchInNegativeWords.length ? <span className="badge badge-pill badge-danger">{ this.state.searchWord }</span> : 
+                  searchInNegativeWords.length ? <span className="badge badge-pill badge-danger p-3">{ this.state.searchWord }</span> : 
                   negativeWords && negativeWords.map(word => {
                     return (
                       <span key={ word.id }>{ word.word } </span>

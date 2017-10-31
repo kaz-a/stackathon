@@ -50,7 +50,37 @@
   100% {transform:scale(2); opacity:0;}
 }
 
-.btn:hover {
-  background: transparent;
-  color: #000;
+
+.quote {
+  font-size: 36px;
 }
+
+.axis line,
+.axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.axis-x line{
+    display: none;
+}
+.axis-x path {
+    display: none;
+}
+.axis-y path {
+    display: none;
+}
+div.tooltip {   
+    position: absolute;           
+    text-align: left;           
+    width: auto;                  
+    height: auto;                 
+    padding: 8px;             
+    font: 12px sans-serif;        
+    background: black;   
+    border-radius: 0px;           
+    pointer-events: none;  
+    color: white;       
+}
+
+
