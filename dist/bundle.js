@@ -40092,15 +40092,6 @@ var Navbar = function Navbar(props) {
             { to: '/words', className: 'nav-link' },
             'Word List'
           )
-        ),
-        _react2.default.createElement(
-          'li',
-          { className: 'nav-item' },
-          _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/analyze', className: 'nav-link' },
-            'Analysis'
-          )
         )
       )
     )

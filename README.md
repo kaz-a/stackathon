@@ -14,6 +14,7 @@ This app will tell you what positive/negative words you are saying. Click on the
 * React
 * Redux
 * Postgres db
+* d3
 * react-speech-recognition
 
 
