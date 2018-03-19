@@ -142,5 +142,3 @@ const mapStateToProps = ({ words, texts }) => {
 }
 
 export default connect(mapStateToProps, null)(Analyze);
-
-
